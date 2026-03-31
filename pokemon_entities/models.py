@@ -6,7 +6,6 @@ class Pokemon(models.Model):
     image = models.ImageField(upload_to='images', null=True)
 
     def __str__(self):
-        #return super().__str__()
         return f'{self.title}'
     
 
@@ -35,5 +34,4 @@ class PokemonEntity(models.Model):
     stamina = models.IntegerField('Выносливость', null=True, blank=True)
 
     def __str__(self):
-        #return super().__str__()
         return f'{self.pokemon.title, self.level}'
