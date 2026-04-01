@@ -90,7 +90,9 @@ def show_pokemon(request, pokemon_id):
             'description': pokemon.description,
             'title_en': pokemon.title_en,
             'title_jp': pokemon.title_jp,
+            #'next_evolution': pokemon.next_evolution,
         }]
+    print(pokemons_on_page)
 
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
