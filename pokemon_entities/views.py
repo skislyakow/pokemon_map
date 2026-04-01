@@ -87,7 +87,9 @@ def show_pokemon(request, pokemon_id):
             'pokemon_id': pokemon.id,
             'img_url': pokemon.image.url if pokemon.image else DEFAULT_IMAGE_URL,
             'title_ru': pokemon.title,
-            'description': pokemon.description
+            'description': pokemon.description,
+            'title_en': pokemon.title_en,
+            'title_jp': pokemon.title_jp,
         }]
 
     return render(request, 'pokemon.html', context={
