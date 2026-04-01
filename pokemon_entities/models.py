@@ -7,7 +7,7 @@ class Pokemon(models.Model):
     description = models.TextField('Описание', null=True, blank=True)
     title_en = models.CharField(max_length=200, null=True, blank=True)
     title_jp = models.CharField(max_length=200, null=True, blank=True)
-    next_evolution = models.ForeignKey('self', on_delete=models.CASCADE, blank=True)
+    next_evolution = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='previous_evolutions')
 
     def __str__(self):
         return f'{self.title}'
@@ -38,4 +38,4 @@ class PokemonEntity(models.Model):
     stamina = models.IntegerField('Выносливость', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.pokemon.title, self.level}'
+        return f'{self.pokemon.title}, {self.level}'
