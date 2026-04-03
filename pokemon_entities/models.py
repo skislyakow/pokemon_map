@@ -7,7 +7,8 @@ class Pokemon(models.Model):
         verbose_name='Название:'
     )
     image = models.ImageField(
-        upload_to='images', 
+        upload_to='images',
+        blank=True, 
         verbose_name='Изображение:'
     )
     description = models.TextField(
@@ -40,8 +41,9 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(
         Pokemon, 
-        on_delete=models.CASCADE, 
-        verbose_name='Покемон:'
+        on_delete=models.CASCADE,
+        related_name='entities', 
+        verbose_name='Покемон:'        
     )
     
     lat = models.FloatField(verbose_name='Широта:')
