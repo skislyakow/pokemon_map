@@ -15,7 +15,6 @@ DEFAULT_IMAGE_URL = (
     '/latest/fixed-aspect-ratio-down/width/240/height/240?cb=20130525215832'
     '&fill=transparent'
 )
-NOW_UTC = timezone.now()
 
 
 def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
@@ -30,10 +29,11 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 
 
 def show_all_pokemons(request):
+    now = timezone.now()
     pokemon_entities = PokemonEntity.objects.all()
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for entity in pokemon_entities:
-        if entity.disappeared_at and entity.disappeared_at > NOW_UTC > entity.appeared_at:
+        if entity.disappeared_at and entity.disappeared_at > now > entity.appeared_at:
             img_url = request.build_absolute_uri(entity.pokemon.image.url)
 
             add_pokemon(
