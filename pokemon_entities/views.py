@@ -1,5 +1,4 @@
 import folium
-import json
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
@@ -10,14 +9,9 @@ from .models import PokemonEntity
 
 
 MOSCOW_CENTER = [55.751244, 37.618423]
-DEFAULT_IMAGE_URL = (
-    'https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21.png/revision'
-    '/latest/fixed-aspect-ratio-down/width/240/height/240?cb=20130525215832'
-    '&fill=transparent'
-)
 
 
-def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
+def add_pokemon(folium_map, lat, lon, image_url):
     icon = folium.features.CustomIcon(
         image_url,
         icon_size=(50, 50),
@@ -44,17 +38,15 @@ def show_all_pokemons(request):
             entity.lat,
             entity.lon,
             img_url
-        )            
-
+        )
     pokemons_on_page = []
     pokemons = Pokemon.objects.all()
     for pokemon in pokemons:
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
-            'img_url': pokemon.image.url if pokemon.image else DEFAULT_IMAGE_URL,
+            'img_url': pokemon.image.url,
             'title_ru': pokemon.title,
         })
-
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
         'pokemons': pokemons_on_page,
@@ -74,7 +66,7 @@ def show_pokemon(request, pokemon_id):
         disappeared_at__gte=now
     )
     for entity in active_entities:
-        img_url = request.build_absolute_uri(pokemon.image.url) if pokemon.image else DEFAULT_IMAGE_URL
+        img_url = request.build_absolute_uri(pokemon.image.url)
         add_pokemon(
             folium_map,
             entity.lat,
@@ -82,7 +74,7 @@ def show_pokemon(request, pokemon_id):
             img_url
         )
 
-    next_pokemon = pokemon.next_evolution    
+    next_pokemon = pokemon.next_evolution
     if pokemon.next_evolution:
         next_evolution = {
             'pokemon_id': next_pokemon.id,
@@ -92,7 +84,7 @@ def show_pokemon(request, pokemon_id):
     else:
         next_evolution = None
 
-    previous_pokemon = pokemon.previous_evolutions.first()       
+    previous_pokemon = pokemon.previous_evolutions.first()
     if previous_pokemon:
         previous_evolution = {
             'pokemon_id': previous_pokemon.id,
@@ -100,7 +92,7 @@ def show_pokemon(request, pokemon_id):
             'img_url': request.build_absolute_uri(previous_pokemon.image.url),
         }
     else:
-        previous_evolution = None 
+        previous_evolution = None
 
     pokemon_on_page = {
             'pokemon_id': pokemon.id,
@@ -112,7 +104,6 @@ def show_pokemon(request, pokemon_id):
             'next_evolution': next_evolution,
             'previous_evolution': previous_evolution
         }
-    
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(),
         'pokemon': pokemon_on_page
