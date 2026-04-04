@@ -8,7 +8,6 @@ class Pokemon(models.Model):
     )
     image = models.ImageField(
         upload_to='images',
-        blank=True, 
         verbose_name='Изображение:'
     )
     description = models.TextField(
@@ -50,14 +49,10 @@ class PokemonEntity(models.Model):
     lon = models.FloatField(verbose_name='Долгота:')
 
     appeared_at = models.DateTimeField(
-        null=True,
-        blank=True,
         verbose_name='Дата и время начала события:'
     )
 
     disappeared_at = models.DateTimeField(
-        null=True,
-        blank=True,
         verbose_name='Дата и время окончания события:'
     )
 
